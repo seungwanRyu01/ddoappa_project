@@ -104,24 +104,29 @@ def myPage(req):
         return render(req, 'mypage.html', {'mypage':req.session.get('id'), 'infoUser':infoUser})
 
 
-def updateUserPage(req):
-    return render(req, 'updateUser.html')
 
 # 회원정보 수정 페이지
-def updateUser(req):
-    # change_user = User.objects.get(userid = req.POST.get('id'), password = req.POST.get('pw'), username = req.POST.get('name'), usermail = req.POST.get('email'), 
-    #                                 phoneNumber = req.POST.get('pNum'), job = req.POST.get('job'), exercise_frequency = req.POST.get('freq'))
+def updateUserPage(req):
+    if req.session.get('id'):
+        infoUser = User.objects.get(userid = req.session.get('id'))
+        return render(req, 'updateUser.html', {'infoUser':infoUser} )
 
-    change_user = User.objects.get(userid = req.session.get('id'), password = req.POST.get('pw'))
+
+# 회원정보 수정 함수
+def updateUser(req):
+    change_user = User.objects.get(userid = req.POST.get('id'), password = req.POST.get('pw'), )
+
+    # username = req.POST.get('name'), useremail = req.POST.get('email'), phoneNumber = req.POST.get('pNum'), 
+    # job = req.POST.get('job'), exercise_frequency = req.POST.get('freq')
     print(change_user)
 
     if change_user:
         change_user.password = req.POST.get('new_pw')
-        # change_user.username = req.POST.get('new_name')
-        # change_user.useremail = req.POST.get('new_email')
-        # change_user.phoneNumber = req.POST.get('new_pNum')
-        # change_user.job = req.POST.get('new_job')
-        # change_user.exercise_frequency = req.POST.get('new_freq')
+        change_user.username = req.POST.get('new_name')
+        change_user.useremail = req.POST.get('new_email')
+        change_user.phoneNumber = req.POST.get('new_pNum')
+        change_user.job = req.POST.get('new_job')
+        change_user.exercise_frequency = req.POST.get('new_freq')
 
         change_user.save()
     
