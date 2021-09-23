@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<br><br>
+<br>
+<br>
+
+
+<div> 이름 : {{infoUser.userid}} </div>
+<div> 아이디 : {{infoUser.username}} </div>
+<div> 이메일 : {{infoUser.useremail}} </div>
+<div> 휴대폰 번호 : {{infoUser.phoneNumber}} </div>
+<div> 성별 : {{infoUser.gender}} </div>
+<div> 직업 : {{infoUser.job}} </div>
+<div> 운동 빈도 : {{infoUser.exercise_frequency}} </div>
+
+<button class="btn btn-primary btn-lg" href="{% url 'updateuser' %}">회원정보 수정</button>
+
+{% endblock %}
+
+{% if session %}
+<script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<script>
+$('#logIn').addClass('d-none');
+$('#signUp').addClass('d-none');
+$('#logOut').removeClass('d-none');
+$('#loginWelcome').removeClass('d-none');
+$('#myPage').removeClass('d-none');
+</script>
+{% endif %}
+
