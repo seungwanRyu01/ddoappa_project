@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% block style %}
+{% endblock %}
 {% block content %}
 
 <!-- Hero Section Start-->
@@ -11,8 +13,8 @@
                 <h3 class="hero-title text-dark">Too much time to find a hospital?</h3>
                     <p class="lead mt-4 hero-subtitle fw-normal">빅데이터를 기반한 병명 진단부터 병원 찾기 서비스까지</p>
                     <div class="hero-btns mt-5">
-                        <a href="#" class="btn btn-dark hero-btn btn-lg">Get Started</a>
-                        <a href="#" class="btn btn-secondary hero-btn btn-lg"><img src="{% static 'assets/images/google_play_icon.png' %}">  Google Play</a>
+                        <a href="https://play.google.com/" class="btn btn-secondary hero-btn btn-lg"><img src="{% static 'assets/images/google_play_icon.png' %}"> Google Play</a>
+                        <a href="https://www.apple.com/kr/app-store/" class="btn btn-dark hero-btn btn-lg"><img src="{% static 'assets/images/appstore_logo.png' %}"> App Store</a>
                     </div>
                 </div>
             </div>
@@ -30,7 +32,7 @@
 <!-- Hero Section End-->
 
 <!-- Features Start-->
-<section class="features bg-warning" id="scrollspyHeading1">
+<section class="features" id="scrollspyHeading1">
     <div class="container short-section mx-auto mt-2">
         <br></br>
         <br></br>
@@ -38,8 +40,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-head mx-auto">
-                    <h3 class="section-title text-center text-dark fw-bold">서비스 소개</h3>
-                    <p class="section-subtitle mt-3 text-center mb-0">우리는 이러이러한 서비스를 제공하고 있다.</p>
+                    <h3 class="section-title text-center text-dark fw-bold">DDOAPPA 서비스 소개</h3>
+                    <p class="section-subtitle mt-4 text-center mb-0">현대인들에게 피할 수 없는 부상! 어차피 병원 가는 거 더 편하게 찾자!</p>
                 </div>
             </div>
         </div>
@@ -47,29 +49,29 @@
             <div class="col-12 col-md-6">
                 <div class="feature-box position-relative">
                     <img src="{% static 'assets/images/branding.svg' %}" class="feature-box-icon">
-                    <h3 class="feature-box-title text-dark">Branding</h3>
-                    <p class="feature-box-text">Sed blandit dui egestas, sollicitudin nunc non, congue sem. Quisque dapibus in dolor. </p>
+                    <h3 class="feature-box-title text-dark fw-bold">Speedy</h3>
+                    <p class="feature-box-text mt-4">신속한 검색과 매칭 서비스를 제공하여 검색에 소모되는 불필요한 시간 단축</p>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="feature-box position-relative">
                     <img src="{% static 'assets/images/ux.svg' %}" class="feature-box-icon">
-                    <h3 class="feature-box-title text-dark">UX</h3>
-                    <p class="feature-box-text">Sed blandit dui egestas, sollicitudin nunc non, congue sem. Quisque dapibus in dolor. </p>
+                    <h3 class="feature-box-title text-dark fw-bold">Familiar</h3>
+                    <p class="feature-box-text mt-4">어려운 사용법은 그만! 간편하고 소비자 친화적인 서비스 제공으로 편리한 접근성 제공</p>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="feature-box position-relative">
                     <img src="{% static 'assets/images/growth.svg' %}" class="feature-box-icon">
-                    <h3 class="feature-box-title text-dark">Growth</h3>
-                    <p class="feature-box-text">Sed blandit dui egestas, sollicitudin nunc non, congue sem. Quisque dapibus in dolor. </p>
+                    <h3 class="feature-box-title text-dark fw-bold">Low Cost</h3>
+                    <p class="feature-box-text mt-4">고객 맞춤형 가격대가 알맞는 병원 매칭으로 비용 절감. 원장도 적은 비용으로 공고 가능</p>
                 </div>
             </div>
             <div class="col-12 col-md-6">
                 <div class="feature-box position-relative">
                     <img src="{% static 'assets/images/marketing.svg' %}" class="feature-box-icon">
-                    <h3 class="feature-box-title text-dark">Marketing</h3>
-                    <p class="feature-box-text">Sed blandit dui egestas, sollicitudin nunc non, congue sem. Quisque dapibus in dolor. </p>
+                    <h3 class="feature-box-title text-dark fw-bold">Extensive</h3>
+                    <p class="feature-box-text mt-4">고객 뿐만 아니라 병원도 원하는 서비스 제공. 장소, 시간 등 소비자 검색 조건 확장성 보유</p>
                 </div>
             </div>
         </div>

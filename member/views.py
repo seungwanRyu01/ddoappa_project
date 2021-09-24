@@ -114,10 +114,7 @@ def updateUserPage(req):
 
 # 회원정보 수정 함수
 def updateUser(req):
-    change_user = User.objects.get(userid = req.POST.get('id'), password = req.POST.get('pw'), )
-
-    # username = req.POST.get('name'), useremail = req.POST.get('email'), phoneNumber = req.POST.get('pNum'), 
-    # job = req.POST.get('job'), exercise_frequency = req.POST.get('freq')
+    change_user = User.objects.get(userid = req.POST.get('id'), password = req.POST.get('pw'))
     print(change_user)
 
     if change_user:
@@ -135,7 +132,14 @@ def updateUser(req):
 
 
 
-# 회원 탈퇴 완료 페이지
+# 회원 탈퇴 페이지
+def deleteUserPage(req):
+    if req.session.get('id'):
+        infoUser = User.objects.get(userid = req.session.get('id'))
+        return render(req, 'deleteUser.html', {'infoUser':infoUser})
+
+
+# 회원 탈퇴 구현 함수
 def deleteUser(req):
     delete_user = User.objects.get(userid=req.POST.get('id'), password=req.POST.get('pw'))
 

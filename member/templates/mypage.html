@@ -15,7 +15,8 @@
 <div> 직업 : {{infoUser.job}} </div>
 <div> 운동 빈도 : {{infoUser.exercise_frequency}} </div>
 
-<button class="btn btn-primary btn-lg" href="{% url 'updateuser' %}">회원정보 수정</button>
+<button class="btn btn-warning btn-lg" onClick="location.href='http://49.50.162.71:8100/member/updateuserPage/'">회원정보 수정</button>
+<button class="btn btn-danger btn-lg" onClick="location.href='http://49.50.162.71:8100/member/deleteuserPage/'">회원 탈퇴</button>
 
 {% endblock %}
 
