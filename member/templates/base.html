@@ -12,9 +12,19 @@
       <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
       <link rel="preconnect" href="https://fonts.gstatic.com">
       <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,300;1,400;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-      {% block style %}
-      <style></style>
-      {% endblock %}
+      <script src="https://kit.fontawesome.com/0095e3bbf8.js" crossorigin="anonymous"></script>
+      <style>
+        @font-face {
+            font-family: 'InfinitySans-RegularA1';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body{
+            font-family: 'InfinitySans-RegularA1';
+        }
+      </style>
    </head>
    <body>
       <!-- Navigation Start-->
