@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'member',
-    'ckeditor'
+    'ckeditor',
+    'django_summernote'
 ]
 
 MIDDLEWARE = [
@@ -129,9 +130,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-INSTALLED_APPS += ['django_summernote']
-
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
@@ -145,3 +143,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Django Session Timeout Code
 SESSION_COOKIE_AGE = 1200
 SESSION_SAVE_EVERY_REQUEST = True
+
+
+# Summernote 선택 설정
+
+SUMMERNOTE_THEME = 'bs4'
+
+SUMMERNOTE_CONFIG = {
+            'attachment_filesize_limit' : 1024 * 1024 * 10,
+
+            # Summernote settings
+            'summernote': {
+                'width' : 720,
+                'height' : 480,
+                'lang' : 'ko-KR',
+                'toolbar' : [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'superscript', 'subscript', 'strikethrough', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                ],
+            }
+}

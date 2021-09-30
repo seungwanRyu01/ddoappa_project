@@ -1,5 +1,9 @@
-from django import forms
+from django import contrib, forms
+from django.forms import widgets
 from .models import Board
+from django import forms
+from django_summernote.fields import SummernoteTextField
+from django_summernote.widgets import SummernoteWidget
 
 # from ckeditor.fields import RichTextFormField
 # from ckeditor_uploader.fields import RichTextUploadingFormField
@@ -18,10 +22,59 @@ from .models import Board
 # Your name : <input type="text" name="name" required>
 # Your website : <input type="url" name="url">
 
-class BoardForm(forms.Form):
-    title = forms.CharField(error_messages = {'required' : '제목을 입력하세요.'},
-                            max_length=100,
-                            label = '게시글 제목')
-    contents = forms.CharField(error_messages = {'required' : '내용을 입력하세요.'},
-                                widget = forms.Textarea,
-                                label = '게시글 내용')
+class BoardWriteForm(forms.ModelForm):
+    title = forms.CharField(
+        label='글 제목',
+        widget = forms.TextInput(
+            attrs = {
+                'placeholder' : '게시글 제목'
+            }),
+        required=True,
+    )
+
+    contents = SummernoteTextField()
+
+    options = (
+        ('Consulting Record', '상담 게시판'),
+        ('notice', '공지사항')
+    )
+
+    board_name = forms.ChoiceField(
+        label = '게시판 선택',
+        widget = forms.Select(),
+        choices = options
+    )
+
+    field_order = [
+        'title',
+        'board_name',
+        'contents'
+    ]
+
+
+    class Meta:
+        model = Board
+        fields = [
+            'title',
+            'contents',
+            'board_name'
+        ]
+        widgets = {
+            'contents' : SummernoteWidget()
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        title = cleaned_data.get('title', '')
+        contents = cleaned_data.get('contents', '')
+        board_name = cleaned_data.get('board_name', 'Consulting Record')
+
+        if title == '':
+            self.add_error('title', '글 제목을 입력하세요.')
+        elif contents == '':
+            self.add_error('contents', '글 내용을 입력하세요.')
+        else:
+            self.title = title
+            self.contents = contents
+            self.board_name = board_name

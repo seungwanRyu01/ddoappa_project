@@ -6,34 +6,23 @@
 {% endblock %}
 {% block content %}
 <br><br>
+<br><br>
 <div class="row mt-5">
     <div class="col-12">
-        <form method="POST" action=".">
+        <form method="POST" action="">
             {% csrf_token %}
-            {% for field in form%}
+
+            {% for form in forms %}
                 <div class="form-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% ifequal field.name 'contents' %}
-                        <textarea
-                            class="form-control"
-                            name="{{ field.name }}"
-                            placeholder="{{ field.label }}"
-                            >
-                        </textarea>
-                    {% else %}
-                        <input
-                            type="{{ field.field.widget.input_type }}"
-                            class="form-control"
-                            id="{{ field.id_for_label }}"
-                            placeholder="{{ field.label }}"
-                            name="{{ field.name }}"
-                        />
-                    {% endifequal %}
+                    <label for="{{ form.id_for_label }}">{{ form.label }}</label>
+                    {{ form }}
                 </div>
-                {% if field.errors %}
-                    <span style="color: red;">{{ field.errors }}</span>
-                {% endif %}
             {% endfor %}
+
+
+            {% if error %}
+            {{ error }}
+            {% endif %}
             <button type="submit" class="btn btn-primary">글쓰기</button>
         </form>
     </div>

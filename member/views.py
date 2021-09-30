@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import User, Board
 from django.contrib import messages
 from django.http import JsonResponse
-from .forms import BoardForm
+from .forms import BoardWriteForm
 # from django.urls import reverse
 # from django.views import generic
 # from .models import ExampleModel
@@ -190,42 +190,44 @@ def deleteUser(req):
 
 
 def board_list(req):
-    if req.session.get('id'):
-        infoUser = User.objects.get(userid = req.session.get('id'))
-        boards= Board.objects.all().order_by('-id')
-        return render(req, 'board_list.html', {'session' : req.session.get('id'), 'infoUser' : infoUser, 'boards' : boards })
-    else:
-        boards= Board.objects.all().order_by('-id')
-        return render(req, 'board_list.html', {'session' : req.session.get('id'), 'boards' : boards })
+    login_session = req.session.get('id', '')
+    infoUser = User.objects.get(userid = req.session.get('id'))
+
+    return render(req, 'board_list.html', {'session' : login_session, 'infoUser' : infoUser })
 
 
 
 def board_write(req):
-    if req.method == "POST":
-        form = BoardForm(req.POST)
+    login_session = req.session.get('id', '')
+    infoUser = User.objects.get(userid = req.session.get('id'))
+    context = {'session' : login_session}
 
-        if form.is_valid():
-            # form의 모든 validators 호출 유효성 검증 수행
-            user_id = req.session.get('id')
-            member = User.objects.get(pk=user_id)
-            print(user_id)
-            
-            board = Board()
-            board.title    = form.cleaned_data['title']
-            board.contents = form.cleaned_data['contents']
+    if req.method == 'GET':
+        write_form  = BoardWriteForm()
+        context['forms'] = write_form
+        return render(req, 'board_write.html', context)
 
-            # 검증에 성공한 값들은 사전타입으로 제공 (form.cleaned_data)
-            # 검증에 실패시 form.error 에 오류 정보를 저장
-            
-            board.writer = member
+    elif req.method == 'POST':
+        write_form = BoardWriteForm(req.POST)
+
+        if write_form.is_valid():
+            writer = User.objects.get(userid = login_session)
+            board = Board(
+                title = write_form.title,
+                contents = write_form.contents,
+                writer = writer,
+                board_name = write_form.board_name
+            )
             board.save()
+            return redirect('../boardlist')
+        else:
+            context['forms'] = write_form
+            if write_form.errors:
+                for value in write_form.errors.values():
+                    context['error'] = value
+            return render(req, 'board_write.html', {'infoUser' : infoUser }, context)
 
-            return redirect('../boardlist/')
 
-    else:
-        form = BoardForm()
-
-    return render(req, 'board_write.html', {'form' : form})
 
 
 
