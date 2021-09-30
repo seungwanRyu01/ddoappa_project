@@ -1,17 +1,24 @@
+from django.http.response import HttpResponse
 from django.shortcuts import render, redirect
-from .models import User
+from .models import User, Board
 from django.contrib import messages
 from django.http import JsonResponse
+from .forms import BoardForm
+# from django.urls import reverse
+# from django.views import generic
+# from .models import ExampleModel
+
 
 
 # 메인 페이지
 def home(req):
     if req.session.get('id'):
-        check_user = User.objects.get(userid = req.session.get('id'))
+        infoUser = User.objects.get(userid = req.session.get('id'))
         print(req.session.get('id'))
-        return render(req, 'home.html', {'session' : req.session.get('id'), 'user_record' : check_user})
+        return render(req, 'home.html', {'session' : req.session.get('id'), 'infoUser' : infoUser })
     else:
         return render(req, 'home.html')
+
 
 
 # 회원가입
@@ -74,15 +81,17 @@ def check_id(req):
 
 # 로그인
 def login(req):
+    if req.method == "POST" :
+        login_member = User.objects.filter(userid=req.POST.get('id'), password=req.POST.get('pw'))
 
-    login_member = User.objects.filter(userid=req.POST.get('id'), password=req.POST.get('pw'))
-
-    if login_member:
-        req.session["id"] = req.POST.get('id')
-        print("로그인 성공")
-        return redirect('home')
-    else:
-        messages.error(req, '존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다.')
+        if login_member:
+            req.session["id"] = req.POST.get('id')
+            print("로그인 성공")
+            return redirect('home')
+        else:
+            messages.error(req, '존재하지 않는 아이디이거나 비밀번호가 일치하지 않습니다!')
+            return render(req, 'login.html')
+    else :
         return render(req, 'login.html')
 
 
@@ -101,7 +110,33 @@ def logout(req):
 def myPage(req):
     if req.session.get('id'):
         infoUser = User.objects.get(userid = req.session.get('id'))
-        return render(req, 'mypage.html', {'mypage':req.session.get('id'), 'infoUser':infoUser})
+
+        if infoUser.gender == "M":
+            infoUser.gender = "남자"
+        else:
+            infoUser.gender = "여자"
+
+        if infoUser.job == "W":
+            infoUser.job = "직장인"
+        elif infoUser.job == "A":
+            infoUser.job = "선수"
+        elif infoUser.job == "S":
+            infoUser.job = "학생"
+        elif infoUser.job == "P":
+            infoUser.job = "대학원생"
+        else:
+            infoUser.job = "기타"
+
+        if infoUser.exercise_frequency == "U":
+            infoUser.exercise_frequency = "자주"
+        elif infoUser.exercise_frequency == "S":
+            infoUser.exercise_frequency = "가끔"
+        elif infoUser.exercise_frequency == "H":
+            infoUser.exercise_frequency = "거의 안함"
+        else:
+            infoUser.exercise_frequency = "안함"
+        
+        return render(req, 'mypage.html', {'session': req.session.get('id'), 'infoUser' : infoUser})
 
 
 
@@ -110,6 +145,7 @@ def updateUserPage(req):
     if req.session.get('id'):
         infoUser = User.objects.get(userid = req.session.get('id'))
         return render(req, 'updateUser.html', {'infoUser':infoUser} )
+
 
 
 # 회원정보 수정 함수
@@ -136,7 +172,8 @@ def updateUser(req):
 def deleteUserPage(req):
     if req.session.get('id'):
         infoUser = User.objects.get(userid = req.session.get('id'))
-        return render(req, 'deleteUser.html', {'infoUser':infoUser})
+        return render(req, 'deleteUser.html', {'infoUser': infoUser})
+
 
 
 # 회원 탈퇴 구현 함수
@@ -149,3 +186,59 @@ def deleteUser(req):
         print('회원탈퇴 완료')
         messages.info(req, '회원탈퇴가 정상적으로 완료되었습니다.')
         return redirect('home')
+
+
+
+def board_list(req):
+    if req.session.get('id'):
+        infoUser = User.objects.get(userid = req.session.get('id'))
+        boards= Board.objects.all().order_by('-id')
+        return render(req, 'board_list.html', {'session' : req.session.get('id'), 'infoUser' : infoUser, 'boards' : boards })
+    else:
+        boards= Board.objects.all().order_by('-id')
+        return render(req, 'board_list.html', {'session' : req.session.get('id'), 'boards' : boards })
+
+
+
+def board_write(req):
+    if req.method == "POST":
+        form = BoardForm(req.POST)
+
+        if form.is_valid():
+            # form의 모든 validators 호출 유효성 검증 수행
+            user_id = req.session.get('id')
+            member = User.objects.get(pk=user_id)
+            print(user_id)
+            
+            board = Board()
+            board.title    = form.cleaned_data['title']
+            board.contents = form.cleaned_data['contents']
+
+            # 검증에 성공한 값들은 사전타입으로 제공 (form.cleaned_data)
+            # 검증에 실패시 form.error 에 오류 정보를 저장
+            
+            board.writer = member
+            board.save()
+
+            return redirect('../boardlist/')
+
+    else:
+        form = BoardForm()
+
+    return render(req, 'board_write.html', {'form' : form})
+
+
+
+# class CKEditorFormView(generic.FormView):
+#     form_class = forms.CkEditorForm
+#     template_name = "form.html"
+
+#     def post(self, req):
+#         content = ExampleModel(content = req.POST.get("ckeditor_standard_example"))
+#         content.save()
+#         return HttpResponse("ok")
+
+#     def get_success_url(self):
+#         return reverse("ckeditor-form")
+
+# ckeditor_form_view = CKEditorFormView.as_view()
