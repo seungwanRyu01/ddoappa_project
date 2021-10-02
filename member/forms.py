@@ -36,7 +36,7 @@ class BoardWriteForm(forms.ModelForm):
 
     options = (
         ('Consulting Record', '상담 게시판'),
-        ('notice', '공지사항')
+        ('Notice', '공지사항')
     )
 
     board_name = forms.ChoiceField(

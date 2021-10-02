@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block style %}
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<br><br>
+<br><br>
+<div class="row mt-5">
+    <div class="col-12">
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            {% for form in forms %}
+                <div class="form-group">
+                    <label for="{{ form.id_for_label }}">{{ form.label }}</label>
+                    {{ form }}
+                </div>
+            {% endfor %}
+
+
+            {% if error %}
+            {{ error }}
+            {% endif %}
+            <button type="submit" class="btn btn-primary">글 수정하기</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

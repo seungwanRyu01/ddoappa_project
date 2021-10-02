@@ -1,9 +1,13 @@
+from django.core import paginator
 from django.http.response import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect, resolve_url
 from .models import User, Board
 from django.contrib import messages
 from django.http import JsonResponse
 from .forms import BoardWriteForm
+from .decorators import login_required
+from datetime import date, datetime, timedelta
+from django.core.paginator import Paginator
 # from django.urls import reverse
 # from django.views import generic
 # from .models import ExampleModel
@@ -189,18 +193,28 @@ def deleteUser(req):
 
 
 
+# 게시판 목록
 def board_list(req):
     login_session = req.session.get('id', '')
-    infoUser = User.objects.get(userid = req.session.get('id'))
+    context = {'session' : login_session }
 
-    return render(req, 'board_list.html', {'session' : login_session, 'infoUser' : infoUser })
+    boards_all = Board.objects.order_by('-id')
+    page = int(req.GET.get('p',1)) #이 없으면 1로 지정
+    paginator = Paginator(boards_all, 5) # 한 페이지당 5개씩 보여줌
+    boards = paginator.get_page(page)
+
+    context['boards'] = boards
+
+    return render(req, 'board_list.html', context)
 
 
 
+# 게시판 글쓰기
+@login_required
 def board_write(req):
     login_session = req.session.get('id', '')
     infoUser = User.objects.get(userid = req.session.get('id'))
-    context = {'session' : login_session}
+    context = {'session' : login_session }
 
     if req.method == 'GET':
         write_form  = BoardWriteForm()
@@ -226,6 +240,93 @@ def board_write(req):
                 for value in write_form.errors.values():
                     context['error'] = value
             return render(req, 'board_write.html', {'infoUser' : infoUser }, context)
+
+
+
+# 게시판 상세 페이지
+def board_detail(req, pk):
+    login_session = req.session.get('id', '')
+    context = {'session' : login_session }
+
+    board = get_object_or_404(Board, id=pk)
+    context['board'] = board
+
+    # 글쓴이인지 확인
+    if board.writer.userid == login_session:
+        context['writer'] = True
+    else:
+        context['writer'] = False
+
+    response = render(req, 'board_detail.html', context)
+
+    # 조회수 기능 체크 (쿠키 이용)
+    expire_date, now = datetime.now(), datetime.now()
+    expire_date += timedelta(days=1)
+    expire_date = expire_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    expire_date -= now
+    max_age = expire_date.total_seconds()
+
+    cookie_value = req.COOKIES.get('hitboard', '_')
+
+    if f'_{pk}_' not in cookie_value:
+        cookie_value += f'_{pk}_'
+        response.set_cookie('hitboard', value=cookie_value, max_age=max_age, httponly=True)
+        board.hits += 1
+        board.save()
+
+    return response
+
+
+
+# 게시판 글 삭제
+def board_delete(req, pk):
+    login_session = req.session.get('id', '')
+
+    board = get_object_or_404(Board, id=pk)
+    if board.writer.userid == login_session:
+        board.delete()
+        return redirect('boardlist')
+    else:
+        return redirect(f'boardlist/boarddetail/{pk}/')
+
+
+
+# 게시판 글 수정
+@login_required
+def board_edit(req, pk):
+    login_session = req.session.get('id', '')
+    context = {'session' : login_session }
+
+    board = get_object_or_404(Board, id=pk)
+    context['board'] = board
+
+    if board.writer.userid != login_session:
+        return redirect(f'boardlist/boarddetail/{pk}/')
+
+    if req.method == 'GET':
+        write_form = BoardWriteForm(instance=board)
+        context['forms'] = write_form
+        return render(req, 'board_edit.html', context)
+
+    elif req.method == 'POST':
+        write_form = BoardWriteForm(req.POST)
+
+        if write_form.is_valid():
+
+            board.title = write_form.title
+            board.contents = write_form.contents
+            board.board_name = write_form.board_name
+
+            board.save()
+            return redirect('boardlist')
+
+        else:
+            context['forms'] = write_form
+            if write_form.errors:
+                for value in write_form.errors.values():
+                    context['error'] = value
+            return render(req, 'board_edit.html', context)
+
 
 
 

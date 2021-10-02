@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import User, Board
 from django_summernote.admin import SummernoteModelAdmin
-
 from django import forms
 # Register your models here.
 
