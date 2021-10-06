@@ -329,6 +329,12 @@ def board_edit(req, pk):
 
 
 
+def map_search(req):
+    return render(req, 'map_search.html')
+
+
+def card_list(req):
+    return render(req, 'card_list.html')
 
 
 

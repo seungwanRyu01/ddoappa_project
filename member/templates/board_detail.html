@@ -6,25 +6,37 @@
 {% endblock %}
 {% block content %}
 
-<div>게시판 상세보기!</div>
-<div style="border: 1px black solid; margin: 20px 0px;"></div>
+<br></br>
+<br></br>
 
-{% if writer %}
-<a href="{% url 'boardedit' pk=board.id %}"><button>수정</button></a>
-<a href="{% url 'boarddelete' pk=board.id %}"><button>삭제</button></a>
-{% endif %}
+<div class="row mt-5 justify-content-center">
+    <div class="col-9">
+        <div class="card" style="width: 100%; text-align: center;">
+            <div class="card-body">
+                <h5 class="card-title">{{ board.board_name }}</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">작성자 : {{ board.writer }}</li>
+                <li class="list-group-item">작성일 : {{ board.write_dttm|date:"Y-m-d" }}</li>
+                <li class="list-group-item">조회수 : {{ board.hits }}</li>
+                <li class="list-group-item">{{ board.contents|safe }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-10 d-flex justify-content-end">
+    {% if writer %}
+        <a href="{% url 'boardedit' pk=board.id %}"><button class="btn btn-warning">수정</button></a>
+        <a href="{% url 'boarddelete' pk=board.id %}"><button class="btn btn-danger">삭제</button></a>
+    {% endif %}
+    </div>
+</div>
 
-<div>
-    게시판 종류 : {{ board.board_name }}
-</div>
-<div>
-    작성자 : {{ board.writer }} | 작성일 : {{ board.write_dttm }} | 조회수 : {{ board.hits }}
-</div>
-<div>
-    제목 : {{ board.title }}
-</div>
-<div>
-    내용 : {{ board.contents|safe }}
-</div>
+<br></br>
+<br></br>
+<br></br>
+<br></br>
 
 {% endblock %}

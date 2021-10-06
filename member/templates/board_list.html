@@ -2,27 +2,29 @@
 {% load static %}
 {% block content %}
 <br><br>
-<!-- <div class="row mt-5">
-    <div class="col-12">
-        <table class="table">
+<br><br>
+<br><br>
+<br><br>
+<div class="row mt-5 justify-content-center align-items-center">
+    <div class="col-9">
+        <table class="table table-hover border">
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">제목</th>
-                    <th scope="col">아이디</th>
+                    <th scope="col">작성자</th>
+                    <th scope="col">게시글 분류</th>
                     <th scope="col">작성일</th>
-                    <th scope="col">최종수정일</th>
                 </tr>
             </thead>
-
             <tbody>
                 {% for board in boards %}
-                <tr>
-                    <th scope="row">{{ board.id }}</th>
+                <tr style="transform: rotate(0);">
+                    <th scope="row"><a href="{% url 'boarddetail' pk=board.id %}" target='_self' class="stretched-link">{{ board.id }}</a></th>
                     <td>{{ board.title }}</td>
-                    <td>{{ board.writer }}</td>
-                    <td>{{ board.created_at }}</td>
-                    <td>{{ board.updated_at }}</td>
+                    <td>{{ board.writer.username }}</td>
+                    <td>{{ board.board_name }}</td>
+                    <td>{{ board.write_dttm|date:"Y-m-d" }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -31,30 +33,10 @@
 </div>
 <br>
 <div class="row">
-    <div class="col-12">
+    <div class="col-10 d-flex justify-content-end">
         <button class="btn btn-primary" onClick="location.href='http://49.50.162.71:8100/member/boardwrite/'">글쓰기</button>
     </div>
-</div> -->
-
-<br><br>
-<br><br>
-<br><br>
-
-<div>게시판 글쓰기!</div>
-<div><a href="{% url 'boardwrite' %}"><button>글쓰기</button></a></div>
-<div style="border: 1px black solid; margin: 20px 0px"></div>
-
-{% for board in boards %}
-<div style="text-align: center;">
-    <a href="{% url 'boarddetail' pk=board.id %}" target='_self'>
-        <tr>
-            <td>{{ board.title }}</td>
-            <td>{{ board.writer.username }}</td>
-            <td>{{ board.write_dttm|date:"Y-m-d" }}</td>
-        </tr>
-    </a>
 </div>
-{% endfor %}
 <div class="row mt-2">
     <div class="col-12">
         <nav>
@@ -84,4 +66,6 @@
         </nav>
     </div>
 </div>
+<br><br>
+<br><br>
 {% endblock %}

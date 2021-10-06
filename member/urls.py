@@ -17,5 +17,7 @@ urlpatterns = [
     # re_path(r'^boarddetail/(?P<pk>[0-9]+)/$', views.board_detail, name='boarddetail'),
     path('boarddetail/<int:pk>/', views.board_detail, name='boarddetail'),
     path('boarddetail/<int:pk>/boarddelete/', views.board_delete, name='boarddelete'),
-    path('boarddetail/<int:pk>/boardedit/', views.board_edit, name='boardedit')
+    path('boarddetail/<int:pk>/boardedit/', views.board_edit, name='boardedit'),
+    path('mapsearch/', views.map_search, name='mapsearch'),
+    path('cardlist/', views.card_list, name='cardlist')
     ]

@@ -8,7 +8,7 @@
 <br><br>
 <br><br>
 <div class="row mt-5">
-    <div class="col-12">
+    <div class="col-12 d-flex justify-content-center">
         <form method="POST" action="">
             {% csrf_token %}
 
@@ -19,9 +19,8 @@
                 </div>
             {% endfor %}
 
-
             {% if error %}
-            {{ error }}
+                {{ error }}
             {% endif %}
             <button type="submit" class="btn btn-primary">글 수정하기</button>
         </form>

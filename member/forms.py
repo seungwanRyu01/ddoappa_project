@@ -5,15 +5,6 @@ from django import forms
 from django_summernote.fields import SummernoteTextField
 from django_summernote.widgets import SummernoteWidget
 
-# from ckeditor.fields import RichTextFormField
-# from ckeditor_uploader.fields import RichTextUploadingFormField
-
-# class CkEditorForm(forms.Form):
-#     ckeditor_standard_example = RichTextFormField()
-#     ckeditor_upload_example = RichTextUploadingFormField(
-#         config_name = "my-custom-toolbar"
-#     )
-
 # class CommentForm(forms.Form):
 #     name = forms.CharField(label='Your name')
 #     url = forms.URLField(label='Your website', required=False)
@@ -35,8 +26,10 @@ class BoardWriteForm(forms.ModelForm):
     contents = SummernoteTextField()
 
     options = (
-        ('Consulting Record', '상담 게시판'),
-        ('Notice', '공지사항')
+        ('Suggestion', '건의 사항'),
+        ('Problem', '문제 제기'),
+        ('Error', '서비스 에러'),
+
     )
 
     board_name = forms.ChoiceField(
@@ -68,7 +61,7 @@ class BoardWriteForm(forms.ModelForm):
 
         title = cleaned_data.get('title', '')
         contents = cleaned_data.get('contents', '')
-        board_name = cleaned_data.get('board_name', 'Consulting Record')
+        board_name = cleaned_data.get('board_name', 'Suggestion')
 
         if title == '':
             self.add_error('title', '글 제목을 입력하세요.')
