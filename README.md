@@ -2,5 +2,5 @@
 
 ***
 
-![또아파_메인홈피](https://user-images.githubusercontent.com/57697624/146687039-a02e9177-b4bf-48b9-90e8-77ae2daf5937.png)
+![ddoappa_logo](https://user-images.githubusercontent.com/57697624/147517805-4208c24e-ae47-42e6-b1ba-a7bf16061b7a.png)
 
